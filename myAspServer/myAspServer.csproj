@@ -10,4 +10,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controller\" />
+    <Folder Include="Model\Todo\Repository\" />
+    <Folder Include="Model\Todo\Service\" />
+  </ItemGroup>
+
 </Project>
