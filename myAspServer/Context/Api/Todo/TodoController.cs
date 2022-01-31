@@ -4,23 +4,25 @@
     using Microsoft.EntityFrameworkCore;
     using System.Text.Json;
     using myAspServer.Context.Database;
+    using myAspServer.Model.Todo.Service;
+    using myAspServer.Model.Todo.Repository;
 
-    public static class TodoControllerBuilder
+    public static class TodoController
     {
         public static void Init(WebApplication app)
         {
             var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-            app.MapGet("/todoitems", async (TodoDb db) =>
+            app.MapGet("/todoitems", async (TodoDbContext db) =>
                 await db.Todos.Select(x => new TodoItemDTO(x)).ToListAsync());
 
-            app.MapGet("/todoitems/{id}", async (int id, TodoDb db) =>
+            app.MapGet("/todoitems/{id}", async (int id, TodoDbContext db) =>
                 await db.Todos.FindAsync(id)
                     is TodoItemEntity todo
                         ? Results.Ok(new TodoItemDTO(todo))
                         : Results.NotFound());
 
-            app.MapPost("/todoitems", async (TodoItemDTO todoItemDTO, TodoDb db) =>
+            app.MapPost("/todoitems", (TodoItemDTO todoItemDTO, TodoDbContext db) =>
             {
                 TodoItemEntity todo = new TodoItemEntity
                 {
@@ -29,13 +31,14 @@
                     IsComplete = todoItemDTO.IsComplete,
                 };
 
-                db.Todos.Add(todo);
-                await db.SaveChangesAsync();
+                ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(db);
+                ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
+                todoItemService.Add(todo);
 
                 return Results.Created($"/todoitems/{todo.Id}", new TodoItemDTO(todo));
             });
 
-            app.MapPut("/todoitems/{id}", async (int id, TodoItemDTO inputTodoItemDTO, TodoDb db) =>
+            app.MapPut("/todoitems/{id}", async (int id, TodoItemDTO inputTodoItemDTO, TodoDbContext db) =>
             {
                 var todo = await db.Todos.FindAsync(id);
 
@@ -49,16 +52,11 @@
                 return Results.NoContent();
             });
 
-            app.MapDelete("/todoitems/{id}", async (int id, TodoDb db) =>
+            app.MapDelete("/todoitems/{id}", (int id, TodoDbContext db) =>
             {
-                if (await db.Todos.FindAsync(id) is TodoItemEntity todo)
-                {
-                    db.Todos.Remove(todo);
-                    await db.SaveChangesAsync();
-                    return Results.Ok(todo);
-                }
-
-                return Results.NotFound();
+                ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(db);
+                ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
+                todoItemService.Delete(id);
             });
         }
     }

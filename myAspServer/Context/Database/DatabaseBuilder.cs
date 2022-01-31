@@ -6,7 +6,7 @@
     {
         public static void Build(WebApplicationBuilder builder)
         {
-            builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+            builder.Services.AddDbContext<TodoDbContext>(opt => opt.UseInMemoryDatabase("TodoList"));
         }
     }
 }
