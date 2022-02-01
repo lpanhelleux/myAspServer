@@ -13,8 +13,13 @@
         {
             var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-            app.MapGet("/todoitems", async (TodoDbContext db) =>
-                await db.Todos.Select(x => new TodoItemDTO(x)).ToListAsync());
+            app.MapGet("/todoitems", (TodoDbContext db) =>
+            {
+                ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(db);
+                ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
+
+                return Results.Ok(todoItemService.GetAll().Select(x => new TodoItemDTO(x)).ToList());
+            });
 
             app.MapGet("/todoitems/{id}", (int id, TodoDbContext db) =>
             {
@@ -33,7 +38,7 @@
 
             app.MapPost("/todoitems", (TodoItemDTO todoItemDTO, TodoDbContext db) =>
             {
-                TodoItemEntity todo = new TodoItemEntity
+                TodoItemEntity todo = new()
                 {
                     Id = todoItemDTO.Id,
                     Name = todoItemDTO.Name,

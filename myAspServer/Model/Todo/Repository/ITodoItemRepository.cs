@@ -13,6 +13,6 @@
 
         Task<TodoItemEntity?> Get(int id);
 
-        IList<TodoItemEntity> GetAll();
+        Task<IList<TodoItemEntity>> GetAll();
     }
 }

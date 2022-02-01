@@ -1,5 +1,6 @@
 ﻿namespace myAspServer.Model.Todo.Repository
 {
+    using Microsoft.EntityFrameworkCore;
     using myAspServer.Context.Database;
     using myAspServer.Model.Todo.Entity;
 
@@ -44,9 +45,15 @@
             return null;
         }
 
-        public IList<TodoItemEntity> GetAll()
+        public async Task<IList<TodoItemEntity>> GetAll()
         {
-            throw new NotImplementedException();
+            if (DbContext != null)
+            {
+                return await DbContext.Todos.ToListAsync();
+
+            }
+
+            return new List<TodoItemEntity>();
         }
 
         public void Update(TodoItemEntity todoItem)
