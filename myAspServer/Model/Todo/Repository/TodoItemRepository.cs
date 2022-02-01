@@ -56,9 +56,23 @@
             return new List<TodoItemEntity>();
         }
 
-        public void Update(TodoItemEntity todoItem)
+        public async Task<IResult> Update(int id, string? name, bool isComplete)
         {
-            throw new NotImplementedException();
+            if (DbContext != null)
+            {
+                var todo = await DbContext.Todos.FindAsync(id);
+
+                if (todo is null) return Results.NotFound();
+
+                todo.Name = name;
+                todo.IsComplete = isComplete;
+
+                await DbContext.SaveChangesAsync();
+
+                return Results.NoContent();
+            }
+
+            return Results.StatusCode(500);
         }
     }
 }

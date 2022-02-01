@@ -7,7 +7,7 @@
     {
         public ITodoItemRepository? TodoItemRepository { get; set; }
 
-        public void Add(TodoItemEntity todoItem)
+        public void Create(TodoItemEntity todoItem)
         {
             TodoItemRepository?.Add(todoItem);
         }
@@ -42,9 +42,14 @@
             return new List<TodoItemEntity>();
         }
 
-        public void Update(TodoItemEntity todoItem)
+        public IResult Update(int id, string? name, bool isComplete)
         {
-            throw new NotImplementedException();
+            if (TodoItemRepository != null)
+            {
+                return TodoItemRepository.Update(id, name, isComplete).Result;
+            }
+
+            return Results.StatusCode(500);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace myAspServer.Context.Api.Todo
 {
     using myAspServer.Model.Todo.Entity;
-    using Microsoft.EntityFrameworkCore;
     using System.Text.Json;
     using myAspServer.Context.Database;
     using myAspServer.Model.Todo.Service;
@@ -47,23 +46,17 @@
 
                 ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(db);
                 ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
-                todoItemService.Add(todo);
+                todoItemService.Create(todo);
 
                 return Results.Created($"/todoitems/{todo.Id}", new TodoItemDTO(todo));
             });
 
-            app.MapPut("/todoitems/{id}", async (int id, TodoItemDTO inputTodoItemDTO, TodoDbContext db) =>
+            app.MapPut("/todoitems/{id}", (int id, TodoItemDTO inputTodoItemDTO, TodoDbContext db) =>
             {
-                var todo = await db.Todos.FindAsync(id);
+                ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(db);
+                ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
 
-                if (todo is null) return Results.NotFound();
-
-                todo.Name = inputTodoItemDTO.Name;
-                todo.IsComplete = inputTodoItemDTO.IsComplete;
-
-                await db.SaveChangesAsync();
-
-                return Results.NoContent();
+                return todoItemService.Update(id, inputTodoItemDTO.Name, inputTodoItemDTO.IsComplete);
             });
 
             app.MapDelete("/todoitems/{id}", (int id, TodoDbContext db) =>

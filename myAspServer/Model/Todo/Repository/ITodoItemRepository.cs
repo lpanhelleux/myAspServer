@@ -9,7 +9,7 @@
 
         Task<IResult> Delete(int id);
 
-        void Update(TodoItemEntity todoItem);
+        Task<IResult> Update(int id, string? name, bool isComplete);
 
         Task<TodoItemEntity?> Get(int id);
 

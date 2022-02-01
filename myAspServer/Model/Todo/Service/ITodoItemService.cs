@@ -4,11 +4,11 @@
 
     public interface ITodoItemService
     {
-        void Add(TodoItemEntity todoItem);
+        void Create(TodoItemEntity todoItem);
 
         IResult Delete(int id);
 
-        void Update(TodoItemEntity todoItem);
+        IResult Update(int id, string? name, bool isComplete);
 
         TodoItemEntity? Get(int id);
 
