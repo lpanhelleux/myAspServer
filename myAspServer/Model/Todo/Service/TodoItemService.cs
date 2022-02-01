@@ -22,9 +22,14 @@
             return Results.NotFound();
         }
 
-        public void Get(TodoItemEntity todoItem)
+        public TodoItemEntity? Get(int id)
         {
-            throw new NotImplementedException();
+            if (todoItemRepository != null)
+            {
+                return todoItemRepository.Get(id).Result;
+            }
+
+            return null;
         }
 
         public IList<TodoItemEntity> GetAll()

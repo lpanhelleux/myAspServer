@@ -10,7 +10,7 @@
 
         void Update(TodoItemEntity todoItem);
 
-        void Get(TodoItemEntity todoItem);
+        TodoItemEntity? Get(int id);
 
         IList<TodoItemEntity> GetAll();
     }

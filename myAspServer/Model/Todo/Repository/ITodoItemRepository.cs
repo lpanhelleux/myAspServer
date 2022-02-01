@@ -11,7 +11,7 @@
 
         void Update(TodoItemEntity todoItem);
 
-        void Get(TodoItemEntity todoItem);
+        Task<TodoItemEntity?> Get(int id);
 
         IList<TodoItemEntity> GetAll();
     }

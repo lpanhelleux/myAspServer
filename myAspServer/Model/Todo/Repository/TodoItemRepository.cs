@@ -31,9 +31,17 @@
             return Results.NotFound();
         }
 
-        public void Get(TodoItemEntity todoItem)
+        public async Task<TodoItemEntity?> Get(int id)
         {
-            throw new NotImplementedException();
+            if (DbContext != null)
+            {
+                if (await DbContext.Todos.FindAsync(id) is TodoItemEntity todo)
+                {
+                    return todo;
+                }
+            }
+            
+            return null;
         }
 
         public IList<TodoItemEntity> GetAll()

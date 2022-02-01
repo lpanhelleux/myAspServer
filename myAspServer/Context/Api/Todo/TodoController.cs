@@ -16,11 +16,20 @@
             app.MapGet("/todoitems", async (TodoDbContext db) =>
                 await db.Todos.Select(x => new TodoItemDTO(x)).ToListAsync());
 
-            app.MapGet("/todoitems/{id}", async (int id, TodoDbContext db) =>
-                await db.Todos.FindAsync(id)
-                    is TodoItemEntity todo
-                        ? Results.Ok(new TodoItemDTO(todo))
-                        : Results.NotFound());
+            app.MapGet("/todoitems/{id}", (int id, TodoDbContext db) =>
+            {
+                ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(db);
+                ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
+
+                if (todoItemService.Get(id) is TodoItemEntity todoItemEntity)
+                {
+                    return Results.Ok(new TodoItemDTO(todoItemEntity));
+                }
+                else
+                {
+                    return Results.NotFound();
+                }
+            });
 
             app.MapPost("/todoitems", (TodoItemDTO todoItemDTO, TodoDbContext db) =>
             {
