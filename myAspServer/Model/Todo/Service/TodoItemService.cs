@@ -7,49 +7,26 @@
     {
         public ITodoItemRepository? TodoItemRepository { get; set; }
 
-        public void Create(TodoItemEntity todoItem)
-        {
-            TodoItemRepository?.Add(todoItem);
-        }
+        public void Create(TodoItemEntity todoItem) => TodoItemRepository?.Add(todoItem);
 
         public IResult Delete(int id)
         {
-            if (TodoItemRepository != null)
-            {
-                return TodoItemRepository.Delete(id).Result;
-            }
-
-            return Results.NotFound();
+            return TodoItemRepository != null ? TodoItemRepository.Delete(id).Result : Results.NotFound();
         }
 
         public TodoItemEntity? Get(int id)
         {
-            if (TodoItemRepository != null)
-            {
-                return TodoItemRepository.Get(id).Result;
-            }
-
-            return null;
+            return TodoItemRepository != null ? TodoItemRepository.Get(id).Result : null;
         }
 
         public IList<TodoItemEntity> GetAll()
         {
-            if (TodoItemRepository != null)
-            {
-                return TodoItemRepository.GetAll().Result;
-            }
-
-            return new List<TodoItemEntity>();
+            return TodoItemRepository != null ? TodoItemRepository.GetAll().Result : new List<TodoItemEntity>();
         }
 
         public IResult Update(int id, string? name, bool isComplete)
         {
-            if (TodoItemRepository != null)
-            {
-                return TodoItemRepository.Update(id, name, isComplete).Result;
-            }
-
-            return Results.StatusCode(500);
+            return TodoItemRepository != null ? TodoItemRepository.Update(id, name, isComplete).Result : Results.StatusCode(500);
         }
     }
 }

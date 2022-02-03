@@ -19,14 +19,9 @@
 
         public IResult Get(int id)
         {
-            if (todoItemService.Get(id) is TodoItemEntity todoItemEntity)
-            {
-                return Results.Ok(new TodoItemDTO(todoItemEntity));
-            }
-            else
-            {
-                return Results.NotFound();
-            }
+            return todoItemService.Get(id) is TodoItemEntity todoItemEntity
+                ? Results.Ok(new TodoItemDTO(todoItemEntity))
+                : Results.NotFound();
         }
 
         public IResult Post(TodoItemDTO todoItemDTO)
