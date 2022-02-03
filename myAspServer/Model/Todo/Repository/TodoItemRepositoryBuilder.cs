@@ -6,11 +6,10 @@
     {
         public static ITodoItemRepository Build(TodoDbContext? dbContext)
         {
-            TodoItemRepository todoItemRepository = new()
+            return new TodoItemRepository()
             {
                 DbContext = dbContext
             };
-            return todoItemRepository;
         }
     }
 }

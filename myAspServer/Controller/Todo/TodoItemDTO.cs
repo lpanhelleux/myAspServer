@@ -11,9 +11,11 @@
         public TodoItemDTO()
         { 
         }
-     
-        public TodoItemDTO(TodoItemEntity todoItem) =>
+
+        public TodoItemDTO(TodoItemEntity todoItem)
+        {
             (Id, Name, IsComplete) = (todoItem.Id, todoItem.Name, todoItem.IsComplete);
+        }
     }
 }
     

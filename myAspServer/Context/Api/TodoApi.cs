@@ -14,40 +14,40 @@
 
             app.MapGet("/todoitems", (TodoDbContext dbContext) =>
             {
-                TodoController todoController = BuildController(dbContext);
+                var todoController = BuildController(dbContext);
                 return todoController.GetAll();
             });
 
             app.MapGet("/todoitems/{id}", (int id, TodoDbContext dbContext) =>
             {
-                TodoController todoController = BuildController(dbContext);
+                var todoController = BuildController(dbContext);
                 return todoController.Get(id);
             });
 
             app.MapPost("/todoitems", (TodoItemDTO todoItemDTO, TodoDbContext dbContext) =>
             {
-                TodoController todoController = BuildController(dbContext);
+                var todoController = BuildController(dbContext);
                 return todoController.Post(todoItemDTO);
             });
 
             app.MapPut("/todoitems/{id}", (int id, TodoItemDTO inputTodoItemDTO, TodoDbContext dbContext) =>
             {
-                TodoController todoController = BuildController(dbContext);
+                var todoController = BuildController(dbContext);
                 todoController.Put(id, inputTodoItemDTO);
             });
 
             app.MapDelete("/todoitems/{id}", (int id, TodoDbContext dbContext) =>
             {
-                TodoController todoController = BuildController(dbContext);
+                var todoController = BuildController(dbContext);
                 todoController.Delete(id);
             });
         }
 
         private static TodoController BuildController(TodoDbContext dbContext)
         {
-            ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(dbContext);
-            ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
-            TodoController todoController = TodoControllerBuilder.Build(todoItemService);
+            var todoItemRepository = TodoItemRepositoryBuilder.Build(dbContext);
+            var todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
+            var todoController = TodoControllerBuilder.Build(todoItemService);
             return todoController;
         }
     }

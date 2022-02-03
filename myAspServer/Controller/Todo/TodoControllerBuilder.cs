@@ -4,11 +4,9 @@
 
     public static class TodoControllerBuilder
     {
-        private static readonly TodoController? todoController;
-
         public static TodoController Build(ITodoItemService todoItemService)
         {
-            return todoController ?? new TodoController(todoItemService);
+            return new TodoController(todoItemService);
         }
     }
 }
