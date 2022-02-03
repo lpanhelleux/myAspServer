@@ -1,4 +1,4 @@
-﻿namespace myAspServer.Context.Api.Todo
+﻿namespace myAspServer.Context.Api
 {
     using myAspServer.Context.Database;
     using myAspServer.Controller.Todo;
