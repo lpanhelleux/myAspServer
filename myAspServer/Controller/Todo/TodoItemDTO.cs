@@ -1,6 +1,5 @@
-﻿namespace myAspServer.Context.Api.Todo
+﻿namespace myAspServer.Controller.Todo
 {
-    using Microsoft.EntityFrameworkCore;
     using Model.Todo.Entity;
 
     public class TodoItemDTO

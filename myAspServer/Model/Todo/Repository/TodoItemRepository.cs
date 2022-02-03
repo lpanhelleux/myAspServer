@@ -10,9 +10,9 @@
 
         public async void Add(TodoItemEntity todoItem)
         {
-            DbContext?.Todos.Add(todoItem);
             if (DbContext != null)
             {
+                DbContext.Todos.Add(todoItem);
                 await DbContext.SaveChangesAsync();
             }
         }
@@ -50,7 +50,6 @@
             if (DbContext != null)
             {
                 return await DbContext.Todos.ToListAsync();
-
             }
 
             return new List<TodoItemEntity>();
