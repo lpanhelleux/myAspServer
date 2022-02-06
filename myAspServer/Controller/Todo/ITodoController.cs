@@ -1,11 +1,13 @@
 ﻿namespace myAspServer.Controller.Todo
 {
+    using myAspServer.Controller.ControllerResults;
+
     public interface ITodoController
     {
         void Delete(int id);
-        IResult Get(int id);
-        IResult GetAll();
-        IResult Post(TodoItemDTO todoItemDTO);
-        IResult Put(int id, TodoItemDTO inputTodoItemDTO);
+        IControllerResult Get(int id);
+        IControllerResult GetAll();
+        IControllerResult Post(TodoItemDTO todoItemDTO);
+        IControllerResult Put(int id, TodoItemDTO inputTodoItemDTO);
     }
 }

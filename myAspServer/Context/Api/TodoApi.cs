@@ -1,6 +1,7 @@
 ﻿namespace myAspServer.Context.Api
 {
     using myAspServer.Context.Database;
+    using myAspServer.Controller.ControllerResults;
     using myAspServer.Controller.Todo;
     using myAspServer.Model.Todo.Repository;
     using myAspServer.Model.Todo.Service;
@@ -27,7 +28,9 @@
             app.MapPost("/todoitems", (TodoItemDTO todoItemDTO, TodoDbContext dbContext) =>
             {
                 var todoController = BuildController(dbContext);
-                return todoController.Post(todoItemDTO);
+                IControllerResult result = todoController.Post(todoItemDTO);
+
+                return Results.Created($"/todoitems/{todoItemDTO.Id}", result.Value);
             });
 
             app.MapPut("/todoitems/{id}", (int id, TodoItemDTO inputTodoItemDTO, TodoDbContext dbContext) =>

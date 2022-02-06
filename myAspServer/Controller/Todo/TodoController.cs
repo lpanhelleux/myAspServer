@@ -1,5 +1,6 @@
 ﻿namespace myAspServer.Controller.Todo
 {
+    using myAspServer.Controller.ControllerResults;
     using myAspServer.Model.Todo.Entity;
     using myAspServer.Model.Todo.Service;
 
@@ -12,19 +13,20 @@
             this.todoItemService = todoItemService;
         }
 
-        public IResult GetAll()
+        public IControllerResult GetAll()
         {
-            return Results.Ok(todoItemService.GetAll().Select(x => new TodoItemDTO(x)).ToList());
+            IList<TodoItemDTO> todoItemDTOs = todoItemService.GetAll().Select(x => new TodoItemDTO(x)).ToList();
+            return ControllerResults.Ok(todoItemDTOs);
         }
 
-        public IResult Get(int id)
+        public IControllerResult Get(int id)
         {
             return todoItemService.Get(id) is TodoItemEntity todoItemEntity
-                ? Results.Ok(new TodoItemDTO(todoItemEntity))
-                : Results.NotFound();
+                ? ControllerResults.Ok(new TodoItemDTO(todoItemEntity))
+                : ControllerResults.NotFound();
         }
 
-        public IResult Post(TodoItemDTO todoItemDTO)
+        public IControllerResult Post(TodoItemDTO todoItemDTO)
         {
             TodoItemEntity todo = new()
             {
@@ -34,13 +36,20 @@
             };
 
             todoItemService.Create(todo);
-
-            return Results.Created($"/todoitems/{todo.Id}", new TodoItemDTO(todo));
+            return ControllerResults.Ok(new TodoItemDTO(todo));
         }
 
-        public IResult Put(int id, TodoItemDTO inputTodoItemDTO)
+        public IControllerResult Put(int id, TodoItemDTO inputTodoItemDTO)
         {
-            return todoItemService.Update(id, inputTodoItemDTO.Name, inputTodoItemDTO.IsComplete);
+            ITodoItemResult todoItemResult = todoItemService.Update(id, inputTodoItemDTO.Name, inputTodoItemDTO.IsComplete);
+
+            return todoItemResult.Code switch
+            {
+                ITodoItemResultsEnum.OK => ControllerResults.Ok(todoItemResult.Value),
+                ITodoItemResultsEnum.NotFound => ControllerResults.NotFound(),
+                ITodoItemResultsEnum.NotContent => ControllerResults.NoContent(),
+                _ => throw new Exception(),
+            };
         }
 
         public void Delete(int id)

@@ -7,9 +7,9 @@
 
         void Add(TodoItemEntity todoItem);
 
-        Task<IResult> Delete(int id);
+        Task<ITodoItemResult> Delete(int id);
 
-        Task<IResult> Update(int id, string? name, bool isComplete);
+        Task<ITodoItemResult> Update(int id, string? name, bool isComplete);
 
         Task<TodoItemEntity?> Get(int id);
 

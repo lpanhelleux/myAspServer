@@ -19,21 +19,21 @@
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task<IResult> Delete(int id)
+        public async Task<ITodoItemResult> Delete(int id)
         {
             if (DbContext == null)
             {
-                return Results.NotFound();
+                return TodoItemResults.NotFound();
             }
 
             if (await DbContext.Todos.FindAsync(id) is TodoItemEntity todo)
             {
                 DbContext.Todos.Remove(todo);
                 await DbContext.SaveChangesAsync();
-                return Results.Ok(todo);
+                return TodoItemResults.Ok(todo);
             }
 
-            return Results.NotFound();
+            return TodoItemResults.NotFound();
         }
 
         public async Task<TodoItemEntity?> Get(int id)
@@ -56,23 +56,23 @@
             return DbContext != null ? await DbContext.Todos.ToListAsync() : new List<TodoItemEntity>();
         }
 
-        public async Task<IResult> Update(int id, string? name, bool isComplete)
+        public async Task<ITodoItemResult> Update(int id, string? name, bool isComplete)
         {
             if (DbContext == null)
             {
-                return Results.StatusCode(500);
+                throw new Exception();
             }
 
             var todo = await DbContext.Todos.FindAsync(id);
 
-            if (todo is null) return Results.NotFound();
+            if (todo is null) return TodoItemResults.NotFound();
 
             todo.Name = name;
             todo.IsComplete = isComplete;
 
             await DbContext.SaveChangesAsync();
 
-            return Results.NoContent();
+            return TodoItemResults.NoContent();
         }
     }
 }

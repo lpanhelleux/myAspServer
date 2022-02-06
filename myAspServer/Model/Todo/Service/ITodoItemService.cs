@@ -6,9 +6,9 @@
     {
         void Create(TodoItemEntity todoItem);
 
-        IResult Delete(int id);
+        ITodoItemResult Delete(int id);
 
-        IResult Update(int id, string? name, bool isComplete);
+        ITodoItemResult Update(int id, string? name, bool isComplete);
 
         TodoItemEntity? Get(int id);
 

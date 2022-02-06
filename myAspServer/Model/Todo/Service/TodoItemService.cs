@@ -9,14 +9,14 @@
 
         public void Create(TodoItemEntity todoItem) => TodoItemRepository?.Add(todoItem);
 
-        public IResult Delete(int id)
+        public ITodoItemResult Delete(int id)
         {
-            return TodoItemRepository != null ? TodoItemRepository.Delete(id).Result : Results.NotFound();
+            return TodoItemRepository != null ? TodoItemRepository.Delete(id).Result : TodoItemResults.NotFound();
         }
 
         public TodoItemEntity? Get(int id)
         {
-            return TodoItemRepository != null ? TodoItemRepository.Get(id).Result : null;
+            return TodoItemRepository?.Get(id).Result;
         }
 
         public IList<TodoItemEntity> GetAll()
@@ -24,9 +24,9 @@
             return TodoItemRepository != null ? TodoItemRepository.GetAll().Result : new List<TodoItemEntity>();
         }
 
-        public IResult Update(int id, string? name, bool isComplete)
+        public ITodoItemResult Update(int id, string? name, bool isComplete)
         {
-            return TodoItemRepository != null ? TodoItemRepository.Update(id, name, isComplete).Result : Results.StatusCode(500);
+            return TodoItemRepository != null ? TodoItemRepository.Update(id, name, isComplete).Result : throw new Exception();
         }
     }
 }
