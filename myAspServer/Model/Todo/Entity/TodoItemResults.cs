@@ -14,7 +14,7 @@
 
         internal static ITodoItemResult NoContent()
         {
-            return new TodoItemResult(ITodoItemResultsEnum.NotContent);
+            return new TodoItemResult(ITodoItemResultsEnum.NoContent);
         }
     }
 }

@@ -4,6 +4,6 @@
     {
         OK,
         NotFound,
-        NotContent
+        NoContent
     }
 }

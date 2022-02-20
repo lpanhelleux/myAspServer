@@ -47,7 +47,7 @@
             {
                 ITodoItemResultsEnum.OK => ControllerResults.Ok(todoItemResult.Value),
                 ITodoItemResultsEnum.NotFound => ControllerResults.NotFound(),
-                ITodoItemResultsEnum.NotContent => ControllerResults.NoContent(),
+                ITodoItemResultsEnum.NoContent => ControllerResults.NoContent(),
                 _ => throw new Exception(),
             };
         }
