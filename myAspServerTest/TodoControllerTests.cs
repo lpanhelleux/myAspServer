@@ -1,28 +1,28 @@
 namespace myAspServerTest
 {
+    using Xunit;
+
     using Microsoft.EntityFrameworkCore;
     using myAspServer.Context.Database;
     using myAspServer.Controller.ControllerResults;
     using myAspServer.Controller.Todo;
     using myAspServer.Model.Todo.Repository;
     using myAspServer.Model.Todo.Service;
-    using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
-    using Is = NUnit.DeepObjectCompare.Is;
     
     public class TodoControllerTests
     {
-        private ITodoController todoController;
-        
-        [SetUp]
-        public void Setup()
+        private readonly ITodoController todoController;
+
+        public TodoControllerTests()
         {
-            TodoDbContext todoDbContext = BuildDbContext();
+           TodoDbContext todoDbContext = BuildDbContext();
             todoController = BuildController(todoDbContext);
         }
 
-        [Test]
+
+        [Fact]
         public void Post()
         {
             TodoItemDTO bigDog = new()
@@ -34,11 +34,11 @@ namespace myAspServerTest
             IControllerResult result = todoController.Post(bigDog);
 
             TodoItemDTO? expected = result.Value as TodoItemDTO;
-            Assert.IsNotNull(expected);
-            Assert.Greater(expected?.Id, 0);
+            Assert.NotNull(expected);
+            Assert.True(expected?.Id > 0);
         }
 
-        [Test]
+        [Fact]
         public void Get()
         {
             TodoItemDTO bigDog = new()
@@ -48,15 +48,20 @@ namespace myAspServerTest
             };
 
             IControllerResult resultPost = todoController.Post(bigDog);
-            TodoItemDTO? expected = resultPost.Value as TodoItemDTO;
 
-            IControllerResult resultGet = todoController.Get(expected.Id);
-            TodoItemDTO? actual = resultGet.Value as TodoItemDTO;
-
-            Assert.That(actual, Is.DeepEqualTo(expected));
+            if (resultPost.Value is TodoItemDTO expected)
+            {
+                IControllerResult resultGet = todoController.Get(expected.Id);
+                TodoItemDTO? actual = resultGet.Value as TodoItemDTO;
+                Equal(actual, expected);
+            }
+            else
+            {
+                Assert.True(false);
+            }
         }
 
-        [Test]
+        [Fact]
         public void GetAll()
         {
             // Get all todos before add todos
@@ -85,15 +90,15 @@ namespace myAspServerTest
             IControllerResult resultGetAllAfter = todoController.GetAll();
             IList<TodoItemDTO>? todosAfter = resultGetAllAfter.Value as IList<TodoItemDTO>;
 
-            Assert.AreEqual(2, todosAfter?.Count - todosBefore?.Count);
+            Assert.Equal(2, todosAfter?.Count - todosBefore?.Count);
             TodoItemDTO? actualBigDog = todosAfter?.SingleOrDefault(t => t.Id == expectedBigDog?.Id);
             TodoItemDTO? actualRedFIsh = todosAfter?.SingleOrDefault(t => t.Id == expectedRedFish?.Id);
 
-            Assert.That(actualBigDog, Is.DeepEqualTo(expectedBigDog));
-            Assert.That(actualRedFIsh, Is.DeepEqualTo(expectedRedFish));
+            Equal(actualBigDog, expectedBigDog);
+            Equal(actualRedFIsh, expectedRedFish);
         }
 
-        [Test]
+        [Fact]
         public void Delete()
         {
             TodoItemDTO bigDog = new()
@@ -103,15 +108,26 @@ namespace myAspServerTest
             };
 
             IControllerResult resultPost = todoController.Post(bigDog);
-            TodoItemDTO? expected = resultPost.Value as TodoItemDTO;
+            TodoItemDTO expected = GetTodoItemFromPostResult(resultPost);
 
             todoController.Delete(expected.Id);
 
             IControllerResult resultGet = todoController.Get(expected.Id);
-            Assert.AreEqual(ControllerResultsEnum.NotFound, resultGet.Result);
+            Assert.Equal(ControllerResultsEnum.NotFound, resultGet.Result);
         }
 
-        [Test]
+        private static TodoItemDTO GetTodoItemFromPostResult(IControllerResult resultPost)
+        {
+            if (resultPost.Value is not TodoItemDTO todoItem)
+            {
+                Assert.True(false);
+                return new TodoItemDTO();
+            }
+
+            return todoItem;
+        }
+
+        [Fact]
         public void Put()
         {
             TodoItemDTO bigDog = new()
@@ -121,7 +137,7 @@ namespace myAspServerTest
             };
 
             IControllerResult resultPost = todoController.Post(bigDog);
-            TodoItemDTO? bigDogV1 = resultPost.Value as TodoItemDTO;
+            TodoItemDTO bigDogV1 = GetTodoItemFromPostResult(resultPost);
 
             TodoItemDTO bigDogV2 = new()
             {
@@ -129,17 +145,17 @@ namespace myAspServerTest
                 IsComplete = false,
             };
 
-            IControllerResult? resultPut = todoController.Put(bigDogV1.Id, bigDogV2);
-            Assert.AreEqual(ControllerResultsEnum.NotContent, resultPut.Result);
+            var resultPut = todoController.Put(bigDogV1.Id, bigDogV2);
+            Assert.Equal(ControllerResultsEnum.NotContent, resultPut.Result);
 
             IControllerResult resultGet = todoController.Get(bigDogV1.Id);
             TodoItemDTO? actual = resultGet.Value as TodoItemDTO;
-            
-            Assert.AreEqual(ControllerResultsEnum.OK, resultGet.Result);
-            Assert.AreEqual(actual.Name, bigDogV2.Name);
-            Assert.AreEqual(actual.IsComplete, bigDogV2.IsComplete);
+
+            Assert.Equal(ControllerResultsEnum.OK, resultGet.Result);
+            Assert.Equal(actual?.Name, bigDogV2.Name);
+            Assert.Equal(actual?.IsComplete, bigDogV2.IsComplete);
         }
-        
+
         private static TodoDbContext BuildDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<TodoDbContext>();
@@ -153,6 +169,13 @@ namespace myAspServerTest
             ITodoItemRepository todoItemRepository = TodoItemRepositoryBuilder.Build(todoDbContext);
             ITodoItemService todoItemService = TodoItemServiceBuilder.Build(todoItemRepository);
             return TodoControllerBuilder.Build(todoItemService);
+        }
+
+        private static void Equal(TodoItemDTO actual, TodoItemDTO expected)
+        {
+            Assert.Equal(actual.Id, expected.Id);
+            Assert.Equal(actual.IsComplete, expected.IsComplete);
+            Assert.Equal(actual.Name, expected.Name);
         }
     }
 }
