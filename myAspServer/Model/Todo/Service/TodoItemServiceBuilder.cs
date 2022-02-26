@@ -6,10 +6,7 @@
     {
         public static ITodoItemService Build(ITodoItemRepository todoItemRepository)
         {
-            return new TodoItemService
-            {
-                TodoItemRepository = todoItemRepository
-            };
+            return new TodoItemService(todoItemRepository);
         }
     }
 }

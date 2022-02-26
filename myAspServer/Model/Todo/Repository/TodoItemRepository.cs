@@ -6,26 +6,21 @@
 
     public class TodoItemRepository : ITodoItemRepository
     {
-        public TodoDbContext? DbContext { get; set; }
+        public TodoItemRepository(TodoDbContext dbContext)
+        {
+            DbContext = dbContext;
+            DbContext.Database.EnsureCreated();
+        }
+        private TodoDbContext DbContext { get; }
 
         public async void Add(TodoItemEntity todoItem)
         {
-            if (DbContext == null)
-            {
-                return;
-            }
-
             DbContext.Todos.Add(todoItem);
             await DbContext.SaveChangesAsync();
         }
 
         public async Task<ITodoItemResult> Delete(int id)
         {
-            if (DbContext == null)
-            {
-                return TodoItemResults.NotFound();
-            }
-
             if (await DbContext.Todos.FindAsync(id) is TodoItemEntity todo)
             {
                 DbContext.Todos.Remove(todo);
@@ -38,11 +33,6 @@
 
         public async Task<TodoItemEntity?> Get(int id)
         {
-            if (DbContext == null)
-            {
-                return null;
-            }
-
             if (await DbContext.Todos.FindAsync(id) is TodoItemEntity todo)
             {
                 return todo;
@@ -53,16 +43,11 @@
 
         public async Task<IList<TodoItemEntity>> GetAll()
         {
-            return DbContext != null ? await DbContext.Todos.ToListAsync() : new List<TodoItemEntity>();
+            return await DbContext.Todos.ToListAsync();
         }
 
         public async Task<ITodoItemResult> Update(int id, string? name, bool isComplete)
         {
-            if (DbContext == null)
-            {
-                throw new Exception();
-            }
-
             var todo = await DbContext.Todos.FindAsync(id);
 
             if (todo is null) return TodoItemResults.NotFound();

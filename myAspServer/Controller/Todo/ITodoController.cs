@@ -4,7 +4,7 @@
 
     public interface ITodoController
     {
-        void Delete(int id);
+        IControllerResult Delete(int id);
         IControllerResult Get(int id);
         IControllerResult GetAll();
         IControllerResult Post(TodoItemDTO todoItemDTO);

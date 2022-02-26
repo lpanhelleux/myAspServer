@@ -4,12 +4,9 @@
 
     public static class TodoItemRepositoryBuilder
     {
-        public static ITodoItemRepository Build(TodoDbContext? dbContext)
+        public static ITodoItemRepository Build(TodoDbContext dbContext)
         {
-            return new TodoItemRepository()
-            {
-                DbContext = dbContext
-            };
+            return new TodoItemRepository(dbContext);
         }
     }
 }

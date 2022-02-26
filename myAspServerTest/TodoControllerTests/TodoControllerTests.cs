@@ -1,4 +1,4 @@
-namespace myAspServerTest
+namespace myAspServerTest.TodoControllerTests
 {
     using Xunit;
 
@@ -99,7 +99,7 @@ namespace myAspServerTest
         }
 
         [Fact]
-        public void Delete()
+        public void DeleteOK()
         {
             TodoItemDTO bigDog = new()
             {
@@ -116,6 +116,14 @@ namespace myAspServerTest
             Assert.Equal(ControllerResultsEnum.NotFound, resultGet.Result);
         }
 
+        [Fact]
+        public void DeleteNotFound()
+        {
+            var invalidId = 100;
+            IControllerResult resultGet = todoController.Delete(invalidId);
+            Assert.Equal(ControllerResultsEnum.NotFound, resultGet.Result);
+        }
+        
         private static TodoItemDTO GetTodoItemFromPostResult(IControllerResult resultPost)
         {
             if (resultPost.Value is not TodoItemDTO todoItem)
@@ -128,7 +136,7 @@ namespace myAspServerTest
         }
 
         [Fact]
-        public void Put()
+        public void PutOK()
         {
             TodoItemDTO bigDog = new()
             {
@@ -154,6 +162,21 @@ namespace myAspServerTest
             Assert.Equal(ControllerResultsEnum.OK, resultGet.Result);
             Assert.Equal(actual?.Name, bigDogV2.Name);
             Assert.Equal(actual?.IsComplete, bigDogV2.IsComplete);
+        }
+
+        [Fact]
+        public void PutNotFound()
+        {
+            TodoItemDTO bigDog = new()
+            {
+                Name = "Big dog V2",
+                IsComplete = false,
+            };
+
+            var invalidId = 100;
+
+            var resultPut = todoController.Put(invalidId, bigDog);
+            Assert.Equal(ControllerResultsEnum.NotFound, resultPut.Result);
         }
 
         private static TodoDbContext BuildDbContext()

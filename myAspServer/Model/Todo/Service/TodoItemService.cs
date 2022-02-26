@@ -5,28 +5,33 @@
 
     public class TodoItemService : ITodoItemService
     {
-        public ITodoItemRepository? TodoItemRepository { get; set; }
+        public TodoItemService(ITodoItemRepository todoItemRepository)
+        {
+            TodoItemRepository = todoItemRepository;
+        }
 
-        public void Create(TodoItemEntity todoItem) => TodoItemRepository?.Add(todoItem);
+        private ITodoItemRepository TodoItemRepository { get; }
+
+        public void Create(TodoItemEntity todoItem) => TodoItemRepository.Add(todoItem);
 
         public ITodoItemResult Delete(int id)
         {
-            return TodoItemRepository != null ? TodoItemRepository.Delete(id).Result : TodoItemResults.NotFound();
+            return TodoItemRepository.Delete(id).Result;
         }
 
         public TodoItemEntity? Get(int id)
         {
-            return TodoItemRepository?.Get(id).Result;
+            return TodoItemRepository.Get(id).Result;
         }
 
         public IList<TodoItemEntity> GetAll()
         {
-            return TodoItemRepository != null ? TodoItemRepository.GetAll().Result : new List<TodoItemEntity>();
+            return TodoItemRepository.GetAll().Result;
         }
 
         public ITodoItemResult Update(int id, string? name, bool isComplete)
         {
-            return TodoItemRepository != null ? TodoItemRepository.Update(id, name, isComplete).Result : throw new Exception();
+            return TodoItemRepository.Update(id, name, isComplete).Result;
         }
     }
 }

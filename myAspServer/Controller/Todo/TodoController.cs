@@ -43,18 +43,18 @@
         {
             ITodoItemResult todoItemResult = todoItemService.Update(id, inputTodoItemDTO.Name, inputTodoItemDTO.IsComplete);
 
-            return todoItemResult.Code switch
-            {
-                ITodoItemResultsEnum.OK => ControllerResults.Ok(todoItemResult.Value),
-                ITodoItemResultsEnum.NotFound => ControllerResults.NotFound(),
-                ITodoItemResultsEnum.NoContent => ControllerResults.NoContent(),
-                _ => throw new Exception(),
-            };
+            return todoItemResult.Code == ITodoItemResultsEnum.NoContent
+                ? ControllerResults.NoContent()
+                : ControllerResults.NotFound();
         }
 
-        public void Delete(int id)
+        public IControllerResult Delete(int id)
         {
-            todoItemService.Delete(id);
+            ITodoItemResult todoItemResult = todoItemService.Delete(id);
+
+            return todoItemResult.Code == ITodoItemResultsEnum.NoContent
+                ? ControllerResults.NoContent()
+                : ControllerResults.NotFound();
         }
     }
 }
