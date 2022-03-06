@@ -2,11 +2,14 @@
 {
     using Microsoft.EntityFrameworkCore;
     using myAspServer.Model.Todo.Entity;
-    
+    using myAspServer.Model.User.Entity;
+
     public class TodoDbContext : DbContext
     {        
         public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 
         public DbSet<TodoItemEntity> Todos => Set<TodoItemEntity>();
+
+        public DbSet<UserEntity> Users => Set<UserEntity>();
     }
 }

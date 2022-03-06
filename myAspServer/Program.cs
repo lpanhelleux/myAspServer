@@ -9,5 +9,6 @@ var app = builder.Build();
 
 ApiBuilder.BuildDefaultPageApi().Init(app);
 ApiBuilder.BuildTodoApi().Init(app);
+ApiBuilder.BuildUserApi().Init(app);
 
 app.Run();

@@ -1,5 +1,6 @@
 ﻿namespace myAspServer.Model.Todo.Service
 {
+    using myAspServer.Model.Common.Entity;
     using myAspServer.Model.Todo.Entity;
     using myAspServer.Model.Todo.Repository;
 
@@ -14,7 +15,7 @@
 
         public void Create(TodoItemEntity todoItem) => TodoItemRepository.Add(todoItem);
 
-        public ITodoItemResult Delete(int id)
+        public ITodoResult Delete(int id)
         {
             return TodoItemRepository.Delete(id).Result;
         }
@@ -29,7 +30,7 @@
             return TodoItemRepository.GetAll().Result;
         }
 
-        public ITodoItemResult Update(int id, string? name, bool isComplete)
+        public ITodoResult Update(int id, string? name, bool isComplete)
         {
             return TodoItemRepository.Update(id, name, isComplete).Result;
         }

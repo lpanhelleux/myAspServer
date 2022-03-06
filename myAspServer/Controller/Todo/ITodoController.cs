@@ -8,6 +8,6 @@
         IControllerResult Get(int id);
         IControllerResult GetAll();
         IControllerResult Post(TodoItemDTO todoItemDTO);
-        IControllerResult Put(int id, TodoItemDTO inputTodoItemDTO);
+        IControllerResult Put(int id, TodoItemDTO todoItemDTO);
     }
 }

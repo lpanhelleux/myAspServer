@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using myAspServer.Context.Database;
+    using myAspServer.Model.Common.Entity;
     using myAspServer.Model.Todo.Entity;
 
     public class TodoItemRepository : ITodoItemRepository
@@ -19,16 +20,16 @@
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task<ITodoItemResult> Delete(int id)
+        public async Task<ITodoResult> Delete(int id)
         {
             if (await DbContext.Todos.FindAsync(id) is TodoItemEntity todo)
             {
                 DbContext.Todos.Remove(todo);
                 await DbContext.SaveChangesAsync();
-                return TodoItemResults.Ok(todo);
+                return TodoResults.Ok(todo);
             }
 
-            return TodoItemResults.NotFound();
+            return TodoResults.NotFound();
         }
 
         public async Task<TodoItemEntity?> Get(int id)
@@ -46,18 +47,18 @@
             return await DbContext.Todos.ToListAsync();
         }
 
-        public async Task<ITodoItemResult> Update(int id, string? name, bool isComplete)
+        public async Task<ITodoResult> Update(int id, string? name, bool isComplete)
         {
             var todo = await DbContext.Todos.FindAsync(id);
 
-            if (todo is null) return TodoItemResults.NotFound();
+            if (todo is null) return TodoResults.NotFound();
 
             todo.Name = name;
             todo.IsComplete = isComplete;
 
             await DbContext.SaveChangesAsync();
 
-            return TodoItemResults.NoContent();
+            return TodoResults.NoContent();
         }
     }
 }

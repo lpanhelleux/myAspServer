@@ -124,17 +124,6 @@ namespace myAspServerTest.TodoControllerTests
             Assert.Equal(ControllerResultsEnum.NotFound, resultGet.Result);
         }
         
-        private static TodoItemDTO GetTodoItemFromPostResult(IControllerResult resultPost)
-        {
-            if (resultPost.Value is not TodoItemDTO todoItem)
-            {
-                Assert.True(false);
-                return new TodoItemDTO();
-            }
-
-            return todoItem;
-        }
-
         [Fact]
         public void PutOK()
         {
@@ -177,6 +166,17 @@ namespace myAspServerTest.TodoControllerTests
 
             var resultPut = todoController.Put(invalidId, bigDog);
             Assert.Equal(ControllerResultsEnum.NotFound, resultPut.Result);
+        }
+
+        private static TodoItemDTO GetTodoItemFromPostResult(IControllerResult resultPost)
+        {
+            if (resultPost.Value is not TodoItemDTO todoItem)
+            {
+                Assert.True(false);
+                return new TodoItemDTO();
+            }
+
+            return todoItem;
         }
 
         private static TodoDbContext BuildDbContext()

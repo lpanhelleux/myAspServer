@@ -1,6 +1,7 @@
 ﻿namespace myAspServer.Controller.Todo
 {
     using myAspServer.Controller.ControllerResults;
+    using myAspServer.Model.Common.Entity;
     using myAspServer.Model.Todo.Entity;
     using myAspServer.Model.Todo.Service;
 
@@ -39,20 +40,20 @@
             return ControllerResults.Ok(new TodoItemDTO(todo));
         }
 
-        public IControllerResult Put(int id, TodoItemDTO inputTodoItemDTO)
+        public IControllerResult Put(int id, TodoItemDTO todoItemDTO)
         {
-            ITodoItemResult todoItemResult = todoItemService.Update(id, inputTodoItemDTO.Name, inputTodoItemDTO.IsComplete);
+            ITodoResult todoItemResult = todoItemService.Update(id, todoItemDTO.Name, todoItemDTO.IsComplete);
 
-            return todoItemResult.Code == ITodoItemResultsEnum.NoContent
+            return todoItemResult.Code == ITodoResultsEnum.NoContent
                 ? ControllerResults.NoContent()
                 : ControllerResults.NotFound();
         }
 
         public IControllerResult Delete(int id)
         {
-            ITodoItemResult todoItemResult = todoItemService.Delete(id);
+            ITodoResult todoItemResult = todoItemService.Delete(id);
 
-            return todoItemResult.Code == ITodoItemResultsEnum.NoContent
+            return todoItemResult.Code == ITodoResultsEnum.NoContent
                 ? ControllerResults.NoContent()
                 : ControllerResults.NotFound();
         }
