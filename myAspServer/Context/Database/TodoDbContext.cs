@@ -15,9 +15,7 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TodoItemEntity>()
-                .HasOne(t => t.User)
-                .WithMany(u => u.TodoItems)
-                .IsRequired(false);
+                .HasOne(t => t.User);
         }
     }
 }

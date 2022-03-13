@@ -52,6 +52,11 @@
             return await DbContext.Todos.ToListAsync();
         }
 
+        public async Task<IList<TodoItemEntity>> GetAllByUserId(int userId)
+        {
+            return await DbContext.Todos.Where(t => t.UserId == userId).ToListAsync();
+        }
+
         public async Task<ITodoResult> Update(int id, string? name, bool isComplete)
         {
             var todo = await DbContext.Todos.FindAsync(id);

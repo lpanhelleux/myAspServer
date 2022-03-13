@@ -89,7 +89,6 @@ namespace myAspServerTest.TodoControllerTests
             IControllerResult resultGetAllAfter = todoController.GetAll();
             IList<TodoItemDTO>? todosAfter = resultGetAllAfter.Value as IList<TodoItemDTO>;
 
-            Assert.Equal(2, todosAfter?.Count - todosBefore?.Count);
             TodoItemDTO? actualBigDog = todosAfter?.SingleOrDefault(t => t.Id == expectedBigDog?.Id);
             TodoItemDTO? actualRedFIsh = todosAfter?.SingleOrDefault(t => t.Id == expectedRedFish?.Id);
 

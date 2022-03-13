@@ -10,5 +10,6 @@
         ITodoResult Update(int id, string? name, bool isComplete);
         TodoItemEntity? Get(int id);
         IList<TodoItemEntity> GetAll();
+        IList<TodoItemEntity> GetAllTodosByUserId(int userId);
     }
 }

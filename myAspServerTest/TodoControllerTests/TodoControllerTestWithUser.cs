@@ -55,7 +55,43 @@
             Assert.True(todoObtained?.Id > 0);
             Assert.Equal(bigDog.UserId, todoObtained?.UserId);
         }
-        
+
+        [Fact]
+        public void PostManyTodoForUser()
+        {
+            // Add user
+            UserDTO? john = new()
+            {
+                Name = "John",
+            };
+
+            IControllerResult userResult = userController.Post(john);
+
+            john = userResult.Value as UserDTO;
+
+            // Check before add
+            IControllerResult result = todoController.GetAllTodosByUserId(john.Id);
+            IList<TodoItemDTO>? todosBefore = result.Value as IList<TodoItemDTO>;
+
+            // Add todos for John
+            for (int i = 0; i < 5; i++)
+            {
+                TodoItemDTO bigDog = new()
+                {
+                    Name = "Big dog " + i,
+                    IsComplete = true,
+                    UserId = john.Id,
+                };
+
+                todoController.Post(bigDog);
+            }
+
+            // Get all todos by user
+            result = todoController.GetAllTodosByUserId(john.Id);
+            IList<TodoItemDTO>? todosAfter = result.Value as IList<TodoItemDTO>;
+            Assert.Equal(todosBefore?.Count + 5, todosAfter?.Count);
+        }
+
         private static TodoDbContext BuildDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<TodoDbContext>();
@@ -71,24 +107,11 @@
             return TodoControllerBuilder.Build(todoItemService);
         }
 
-        private static void Equal(TodoItemDTO actual, TodoItemDTO expected)
-        {
-            Assert.Equal(actual.Id, expected.Id);
-            Assert.Equal(actual.IsComplete, expected.IsComplete);
-            Assert.Equal(actual.Name, expected.Name);
-        }
-
         private static IUserController BuildUserController(TodoDbContext todoDbContext)
         {
             IUserRepository userRepository = UserRepositoryBuilder.Build(todoDbContext);
             IUserService userService = UserServiceBuilder.Build(userRepository);
             return UserControllerBuilder.Build(userService);
-        }
-
-        private static void Equal(UserDTO actual, UserDTO expected)
-        {
-            Assert.Equal(actual.Id, expected.Id);
-            Assert.Equal(actual.Name, expected.Name);
         }
     }
 }

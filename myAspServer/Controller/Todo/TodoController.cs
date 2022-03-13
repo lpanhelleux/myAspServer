@@ -59,6 +59,13 @@
                 : ControllerResults.NotFound();
         }
 
+        public IControllerResult GetAllTodosByUserId(int userId)
+        {
+            IList<TodoItemDTO> todoItemDTOs = todoItemService.GetAllTodosByUserId(userId).Select(x => Build(x)).ToList();
+            return ControllerResults.Ok(todoItemDTOs);
+
+        }
+        
         public static TodoItemDTO Build(TodoItemEntity todoItem)
         {
             return new TodoItemDTO()

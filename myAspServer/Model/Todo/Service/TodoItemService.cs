@@ -30,6 +30,11 @@
             return TodoItemRepository.GetAll().Result;
         }
 
+        public IList<TodoItemEntity> GetAllTodosByUserId(int userId)
+        {
+            return TodoItemRepository.GetAllByUserId(userId).Result;
+        }
+
         public ITodoResult Update(int id, string? name, bool isComplete)
         {
             return TodoItemRepository.Update(id, name, isComplete).Result;

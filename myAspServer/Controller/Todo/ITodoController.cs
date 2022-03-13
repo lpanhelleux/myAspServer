@@ -1,6 +1,7 @@
 ﻿namespace myAspServer.Controller.Todo
 {
     using myAspServer.Controller.ControllerResults;
+    using myAspServer.Controller.User;
 
     public interface ITodoController
     {
@@ -9,5 +10,6 @@
         IControllerResult GetAll();
         IControllerResult Post(TodoItemDTO todoItemDTO);
         IControllerResult Put(int id, TodoItemDTO todoItemDTO);
+        IControllerResult GetAllTodosByUserId(int userId);
     }
 }

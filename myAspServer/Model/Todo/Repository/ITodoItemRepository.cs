@@ -15,5 +15,6 @@
         Task<TodoItemEntity?> Get(int id);
 
         Task<IList<TodoItemEntity>> GetAll();
+        Task<IList<TodoItemEntity>> GetAllByUserId(int userId);
     }
 }
