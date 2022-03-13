@@ -8,6 +8,5 @@
         public string? Name { get; set; }
         public bool IsComplete { get; set; }
         public int? UserId { get; set; }
-        public UserEntity User { get; set; }
     }
 }

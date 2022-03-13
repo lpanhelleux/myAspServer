@@ -5,7 +5,7 @@
     using myAspServer.Model.User.Entity;
 
     public class TodoDbContext : DbContext
-    {        
+    {
         public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 
         public DbSet<TodoItemEntity> Todos => Set<TodoItemEntity>();

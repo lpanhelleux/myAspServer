@@ -65,11 +65,11 @@
             return ControllerResults.Ok(todoItemDTOs);
 
         }
-        
+
         public static TodoItemDTO Build(TodoItemEntity todoItem)
         {
             return new TodoItemDTO()
-            { 
+            {
                 Id = todoItem.Id,
                 Name = todoItem.Name,
                 IsComplete = todoItem.IsComplete,

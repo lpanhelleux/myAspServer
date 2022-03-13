@@ -1,7 +1,5 @@
 namespace myAspServerTest.TodoControllerTests
 {
-    using Xunit;
-
     using Microsoft.EntityFrameworkCore;
     using myAspServer.Context.Database;
     using myAspServer.Controller.ControllerResults;
@@ -10,14 +8,15 @@ namespace myAspServerTest.TodoControllerTests
     using myAspServer.Model.Todo.Service;
     using System.Collections.Generic;
     using System.Linq;
-    
+    using Xunit;
+
     public class TodoControllerTests
     {
         private readonly ITodoController todoController;
 
         public TodoControllerTests()
         {
-           TodoDbContext todoDbContext = BuildDbContext();
+            TodoDbContext todoDbContext = BuildDbContext();
             todoController = BuildController(todoDbContext);
         }
 
@@ -121,7 +120,7 @@ namespace myAspServerTest.TodoControllerTests
             IControllerResult resultGet = todoController.Delete(invalidId);
             Assert.Equal(ControllerResultsEnum.NotFound, resultGet.Result);
         }
-        
+
         [Fact]
         public void PutOK()
         {

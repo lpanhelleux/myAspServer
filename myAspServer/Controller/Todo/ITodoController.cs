@@ -1,7 +1,6 @@
 ﻿namespace myAspServer.Controller.Todo
 {
     using myAspServer.Controller.ControllerResults;
-    using myAspServer.Controller.User;
 
     public interface ITodoController
     {
