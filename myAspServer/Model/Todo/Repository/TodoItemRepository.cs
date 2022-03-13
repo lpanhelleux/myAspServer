@@ -16,6 +16,11 @@
 
         public async void Add(TodoItemEntity todoItem)
         {
+            if (todoItem.UserId != null)
+            {
+                todoItem.User = DbContext.Users.Single(u => todoItem.UserId == u.Id);
+            }
+
             DbContext.Todos.Add(todoItem);
             await DbContext.SaveChangesAsync();
         }

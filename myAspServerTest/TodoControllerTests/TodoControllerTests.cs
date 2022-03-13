@@ -21,14 +21,13 @@ namespace myAspServerTest.TodoControllerTests
             todoController = BuildController(todoDbContext);
         }
 
-
         [Fact]
         public void Post()
         {
             TodoItemDTO bigDog = new()
             {
                 Name = "Big dog",
-                IsComplete = true
+                IsComplete = true,
             };
 
             IControllerResult result = todoController.Post(bigDog);

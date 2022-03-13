@@ -16,14 +16,14 @@
 
         public IControllerResult GetAll()
         {
-            IList<TodoItemDTO> todoItemDTOs = todoItemService.GetAll().Select(x => new TodoItemDTO(x)).ToList();
+            IList<TodoItemDTO> todoItemDTOs = todoItemService.GetAll().Select(x => Build(x)).ToList();
             return ControllerResults.Ok(todoItemDTOs);
         }
 
         public IControllerResult Get(int id)
         {
             return todoItemService.Get(id) is TodoItemEntity todoItemEntity
-                ? ControllerResults.Ok(new TodoItemDTO(todoItemEntity))
+                ? ControllerResults.Ok(Build(todoItemEntity))
                 : ControllerResults.NotFound();
         }
 
@@ -34,10 +34,11 @@
                 Id = todoItemDTO.Id,
                 Name = todoItemDTO.Name,
                 IsComplete = todoItemDTO.IsComplete,
+                UserId = todoItemDTO.UserId
             };
 
             todoItemService.Create(todo);
-            return ControllerResults.Ok(new TodoItemDTO(todo));
+            return ControllerResults.Ok(Build(todo));
         }
 
         public IControllerResult Put(int id, TodoItemDTO todoItemDTO)
@@ -56,6 +57,17 @@
             return todoItemResult.Code == ITodoResultsEnum.NoContent
                 ? ControllerResults.NoContent()
                 : ControllerResults.NotFound();
+        }
+
+        public static TodoItemDTO Build(TodoItemEntity todoItem)
+        {
+            return new TodoItemDTO()
+            { 
+                Id = todoItem.Id,
+                Name = todoItem.Name,
+                IsComplete = todoItem.IsComplete,
+                UserId = todoItem.UserId
+            };
         }
     }
 }

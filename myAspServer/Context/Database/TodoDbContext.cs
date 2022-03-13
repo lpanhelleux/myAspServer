@@ -11,5 +11,13 @@
         public DbSet<TodoItemEntity> Todos => Set<TodoItemEntity>();
 
         public DbSet<UserEntity> Users => Set<UserEntity>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TodoItemEntity>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.TodoItems)
+                .IsRequired(false);
+        }
     }
 }
