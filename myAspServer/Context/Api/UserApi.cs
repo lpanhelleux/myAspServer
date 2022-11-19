@@ -42,7 +42,14 @@
             app.MapDelete("/users/{id}", (int id, TodoDbContext dbContext) =>
             {
                 var controller = BuildController(dbContext);
-                controller.Delete(id);
+                IControllerResult result = controller.Delete(id);
+
+                if (result.Result != ControllerResultsEnum.OK)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok();
             });
         }
 

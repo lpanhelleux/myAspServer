@@ -104,10 +104,8 @@
             IControllerResult resultPost = userController.Post(john);
             UserDTO expected = GetUserFromPostResult(resultPost);
 
-            userController.Delete(expected.Id);
-
-            IControllerResult resultGet = userController.Get(expected.Id);
-            Assert.Equal(ControllerResultsEnum.NotFound, resultGet.Result);
+            IControllerResult resultDelete = userController.Delete(expected.Id);
+            Assert.Equal(ControllerResultsEnum.OK, resultDelete.Result);
         }
 
         [Fact]

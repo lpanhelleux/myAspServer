@@ -43,9 +43,13 @@
         {
             ITodoResult result = userService.Delete(id);
 
-            return result.Code == ITodoResultsEnum.NoContent
-                ? ControllerResults.NoContent()
-                : ControllerResults.NotFound();
+            switch(result.Code)
+            {
+                case ITodoResultsEnum.OK:
+                    return ControllerResults.Ok(result);
+                default:
+                    return ControllerResults.NotFound();
+            }
         }
 
         public IControllerResult Put(int id, UserDTO userDTO)
